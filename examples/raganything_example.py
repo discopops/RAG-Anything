@@ -189,7 +189,7 @@ async def process_with_rag(
         embedding_func = EmbeddingFunc(
             embedding_dim=embedding_dim,
             max_token_size=8192,
-            func=lambda texts: openai_embed(
+            func=lambda texts: openai_embed.func(
                 texts,
                 model=embedding_model,
                 api_key=api_key,
@@ -289,8 +289,13 @@ def main():
     parser.add_argument(
         "--parser",
         default=os.getenv("PARSER", "mineru"),
-        choices=["mineru", "docling", "paddleocr"],
-        help="Parser selection",
+        help=(
+            "Parser selection. Built-ins: mineru, docling, paddleocr. "
+            "Custom parsers that you register via register_parser() in the "
+            "same Python process are also accepted when using RAGAnything as "
+            "a library. This example script does not perform any automatic "
+            "plugin discovery."
+        ),
     )
 
     args = parser.parse_args()
